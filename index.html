@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Emulator Start Test</title>
+  <script>
+    let testLog = [];
+
+    function mockInitNES() {
+      testLog.push("initNES() called");
+      window.nes = {
+        loadROM: () => testLog.push("ROM loaded"),
+        frame: () => testLog.push("Emulator started")
+      };
+      return true;
+    }
+
+    function testStartSinglePlayer() {
+      const rom = "tetris.nes";
+      if (!window.nes) {
+        const ready = mockInitNES();
+        if (!ready) return;
+      }
+
+      testLog.push("Fetching ROM: " + rom);
+      window.nes.loadROM();
+      window.nes.frame();
+      testLog.push("testStartSinglePlayer() completed");
+    }
+
+    window.addEventListener("load", () => {
+      testStartSinglePlayer();
+      document.body.innerHTML = "<pre>" + testLog.join("\n") + "</pre>";
+    });
+  </script>
+</head>
+<body>
+  <h1>Running Emulator Start Test...</h1>
+</body>
+</html>
